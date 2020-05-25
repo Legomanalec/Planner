@@ -1,0 +1,9 @@
+/**
+ * Used to (Un)-strikethrough butteon text
+ */
+.button .text {
+    -fx-strikethrough: false;
+}
+.button {
+   -fx-background-color: transparent;
+}

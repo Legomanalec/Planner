@@ -1,0 +1,9 @@
+/**
+ * Used to strikethrough button text
+ */
+.button .text {
+    -fx-strikethrough: true;
+}
+.button {
+   -fx-background-color: transparent;
+}
