@@ -1,53 +1,82 @@
 package application;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.DateFormat;
 import java.util.Scanner;
 
-/*
- * Here we will learn to connect to Oracle DB using JDBC Driver.
- */
+
 public class Database {
 
-	public static void main(String[] args) {
+	private Connection conn;
+	public Database() {
 
-		Scanner scanner = new Scanner(System.in);
-		System.out
-				.println("Please provide below details to connect Oracle Database");
-		System.out.println("Enter Database");
-		String dbName = scanner.next();
-		System.out.println("Enter UserName");
-		String userName = scanner.next();
-		System.out.println("Enter Password");
-		String password = scanner.next();
+		String dbServer = "jdbc:mysql://127.0.0.1:3306/PlannerDB?allowPublicKeyRetrieval=true&useSSL=false";
 
+		String userName = "planneruser";
+		String password = "planner1234";
+		
+		
 		try {
-
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-
-		} catch (ClassNotFoundException e) {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(dbServer, userName, password);
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		Connection connection = null;
-
+		
+	}
+	
+	public void addCellData(String text, int day, int month, int year, boolean complete) {
 		try {
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			ResultSet rs;
+			int id = 0;
+			rs = stmt.executeQuery("select max(cid) from celldata");
+			while (rs.next()) {
+				id = rs.getInt(1);
+			}
+			rs.close();
+			stmt.close();
 
-			connection = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:" + dbName, userName,
-					password);
+			PreparedStatement inststmt = conn
+					.prepareStatement(" insert into celldata (cid,cellText,cellDay,cellMonth,cellYear,isComplete) values(?,?,?,?,?,?) ");
 
+			// first column has the new cell id that is unique
+			inststmt.setInt(1, id + 1);
+			// second ? has the text of the cell
+			inststmt.setString(2, text);
+			// third ? has the day
+			inststmt.setInt(3, day);
+			// fourth ? has the month
+			inststmt.setInt(4, month);
+			// fifth ? has the year
+			inststmt.setInt(5, year);
+			// sixth ? has if completed
+			inststmt.setBoolean(6, complete);
+			
+			inststmt.executeUpdate();
+			
+			inststmt.close();
+			conn.commit();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
-
-		if (connection != null) {
-			System.out.println("nSuccessfullly connected to Oracle DB");
-		} else {
-			System.out.println("nFailed to connect to Oracle DB");
+		
+	}
+	
+	public void deleteCellData(int cid) {
+		try {
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("DELETE FROM celldata WHERE cid = " + cid + ";");
+			stmt.close();
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
 	}
 
 }

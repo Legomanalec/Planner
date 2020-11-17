@@ -23,6 +23,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+    	Database db = new Database();
+    	db.addCellData("test12122", 1, 23, 3222, false);
+    	db.addCellData("testasda122", 1, 23, 3222, false);
+    	db.deleteCellData(3);
         launch(args);
 
     }
