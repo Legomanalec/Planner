@@ -1,15 +1,11 @@
 
 package application;
 
+import java.util.Arrays;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.YearMonth;
 
 public class Main extends Application {
 
@@ -23,11 +19,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-    	Database db = new Database();
-    	db.addCellData("test12122", 1, 23, 3222, false);
-    	db.addCellData("testasda122", 1, 23, 3222, false);
-    	db.deleteCellData(3);
+    	
         launch(args);
+        System.out.println(FullView.db.getTask(17, 11, 2020));
 
     }
     

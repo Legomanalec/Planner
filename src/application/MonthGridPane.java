@@ -22,7 +22,6 @@ public class MonthGridPane extends GridPane {
 		this.yearMonth = yearMonth;
 		
 		LocalDate dayMonthYearDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 1);
-		String sayOfWeekString = dayMonthYearDate.getDayOfWeek().toString();
 		while (!dayMonthYearDate.getDayOfWeek().toString().equals("SUNDAY"))
             dayMonthYearDate = dayMonthYearDate.minusDays(1);
 		
@@ -43,18 +42,11 @@ public class MonthGridPane extends GridPane {
         }	
 	}
 	
-	public void addTasks(int year, int month, int day, boolean isComplete, String task)
-    {
-    	for(VBoxNode ap : allCalendarDays)
-    	{
-    		if(ap.getDate().getYear() == year && ap.getDate().getMonthValue() == month && ap.getDate().getDayOfMonth() == day)
-    		{
-    			TaskButton tb = new TaskButton(task);
-    			tb.setIsComplete(isComplete);
-    			ap.addTaskButton(tb);
-    		}
-    	}
-    }
+	public void populateDay(VBoxNode vbox)
+	{
+
+	}
+	
 	public ArrayList<VBoxNode> getDays()
 	{
 		return allCalendarDays;

@@ -1,19 +1,13 @@
 package application;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.HashMap;
 
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -48,6 +42,7 @@ public class VBoxNode extends VBox{
                 "-fx-border-width: 2;" +
                 "-fx-border-insets: 1;" +
                 "-fx-background-color: #FFFFFF;");
+        
         list = new ArrayList<TaskButton>();
         taskCount = 0;
     
@@ -66,7 +61,7 @@ public class VBoxNode extends VBox{
 
     	            if ((k.equals(KeyCode.ENTER))) 
     	            {	
-    	            	addTaskButton(field.getText());
+    	            	addTaskButton(field.getText());	
     	            	getChildren().remove(field);
     	            }
    
@@ -82,7 +77,19 @@ public class VBoxNode extends VBox{
     
     public void addTaskButton(String task)
     {
-    	lab = new TaskButton(task);
+    	lab = new TaskButton(task, date);
+    	lab.setCid(FullView.db.addCellData(task, getDate().getDayOfMonth(), getDate().getMonthValue(), getDate().getYear(), false));
+    	getChildren().add(lab);
+    	list.add(lab);
+    	taskCount++;
+    	update();
+    }
+    
+    public void addTaskButton(String task, int cid, boolean isComplete)
+    {
+    	lab = new TaskButton(task, date);
+    	lab.setIsComplete(isComplete);
+    	lab.setCid(cid);
     	getChildren().add(lab);
     	list.add(lab);
     	taskCount++;

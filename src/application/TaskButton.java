@@ -1,20 +1,21 @@
 package application;
 
-import java.text.AttributedString;
+import java.time.LocalDate;
 
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
-import java.awt.Font;
-import java.awt.font.TextAttribute;
-import javafx.scene.layout.VBox;
 
 public class TaskButton extends Button {
 
 	private boolean isComplete = false;
-	public TaskButton(String str)
+	private int cid;
+	private LocalDate date;
+	public TaskButton(String str, LocalDate date)
 	{
 		super(str);
-		
+		this.date = date;
+
+    	
 		
 		setStyle("-fx-background-color: transparent;");
 		
@@ -26,6 +27,8 @@ public class TaskButton extends Button {
 		    	vbox.getChildren().remove(this);
 		    	vbox.list.remove(this);
 		    	vbox.update();
+		    	FullView.db.deleteCellData(cid);
+		    	
 		    }
 		    
 		    //strike through a label (alternating)
@@ -34,6 +37,7 @@ public class TaskButton extends Button {
 		    	isComplete = true;
 		    	strikethrough(true);
 		    	vbox.update();
+		    	FullView.db.setComplete(cid, true);
 		    }	
 		    
 		    else if(e.getButton() == MouseButton.PRIMARY && isComplete) 
@@ -41,8 +45,14 @@ public class TaskButton extends Button {
 		    	isComplete = false;
 		    	strikethrough(false);
 		    	vbox.update();
+		    	FullView.db.setComplete(cid, false);
 		    }		    
 		});
+	}
+	
+	public void setCid(int cid)
+	{
+		this.cid = cid;
 	}
 	
 	public boolean isComplete()
@@ -55,6 +65,17 @@ public class TaskButton extends Button {
 		isComplete = b;
 		strikethrough(b);
 
+	}
+	
+	public int getCid()
+	{
+		return cid;
+	}
+	
+	
+	public LocalDate getDate()
+	{
+		return date;
 	}
 	
 

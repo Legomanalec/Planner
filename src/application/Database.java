@@ -1,8 +1,12 @@
 package application;
 
-import java.sql.*;
-import java.text.DateFormat;
-import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class Database {
@@ -26,12 +30,13 @@ public class Database {
 		
 	}
 	
-	public void addCellData(String text, int day, int month, int year, boolean complete) {
+	public int addCellData(String text, int day, int month, int year, boolean complete) {
+		int id = 0;
 		try {
 			conn.setAutoCommit(false);
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
-			int id = 0;
+			
 			rs = stmt.executeQuery("select max(cid) from celldata");
 			while (rs.next()) {
 				id = rs.getInt(1);
@@ -63,6 +68,7 @@ public class Database {
 
 			e.printStackTrace();
 		}
+		return id + 1;
 		
 	}
 	
@@ -78,5 +84,40 @@ public class Database {
 		}
 		
 	}
+	
+	public void setComplete(int cid, boolean complete)
+	{
+		try {
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE celldata SET isComplete =" + complete + " WHERE cid = " + cid + ";");
+			stmt.close();
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<String> getTask(int day, int month, int year)
+	{
+		ArrayList<String> toShow = new ArrayList<String>();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM celldata WHERE cellDay = " + day + " AND cellMonth = " + month + " AND cellYear = " + year + ";");
+			int i = 1;
+			while(rs.next())
+			{
+				toShow.add(rs.getString(i));
+				toShow.add(rs.getString(i++));
+				toShow.add(rs.getString(i+=4));	
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(toShow);
+		return toShow;
+	}
+	
 
 }
