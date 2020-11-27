@@ -1,12 +1,9 @@
 package application;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -38,13 +35,29 @@ public class MonthGridPane extends GridPane {
                 if(vb.getDate().isBefore(LocalDate.now()))
                 	vb.setVBoxComplete();
                 
+                populateDay(vb);
             }
-        }	
+        }
+		
 	}
 	
 	public void populateDay(VBoxNode vbox)
 	{
+		LocalDate date = vbox.getDate();
 
+		ArrayList<String> list = FullView.db.getTask(date);
+		int id = 0;
+		String task = "";
+		boolean isComplete = false;
+		System.out.println(FullView.db.getTask(date));
+		for(int i = 0; i < list.size(); i++)
+		{
+			id = Integer.parseInt(list.get(i++));
+			task = list.get(i++);
+			isComplete = Integer.parseInt(list.get(i)) != 0;
+			vbox.addTaskButton(task, id, isComplete);
+		}
+		
 	}
 	
 	public ArrayList<VBoxNode> getDays()

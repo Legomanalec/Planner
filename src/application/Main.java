@@ -1,6 +1,7 @@
 
 package application;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import javafx.application.Application;
@@ -21,7 +22,8 @@ public class Main extends Application {
     public static void main(String[] args) {
     	
         launch(args);
-        System.out.println(FullView.db.getTask(17, 11, 2020));
+        LocalDate date = LocalDate.now();
+        
 
     }
     

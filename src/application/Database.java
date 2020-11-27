@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -98,18 +99,18 @@ public class Database {
 		}
 	}
 	
-	public ArrayList<String> getTask(int day, int month, int year)
+	public ArrayList<String> getTask(LocalDate date)
 	{
 		ArrayList<String> toShow = new ArrayList<String>();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM celldata WHERE cellDay = " + day + " AND cellMonth = " + month + " AND cellYear = " + year + ";");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM celldata WHERE cellDay = " + date.getDayOfMonth() + " AND cellMonth = " + date.getMonthValue() + " AND cellYear = " + date.getYear() + ";");
 			int i = 1;
 			while(rs.next())
 			{
-				toShow.add(rs.getString(i));
-				toShow.add(rs.getString(i++));
-				toShow.add(rs.getString(i+=4));	
+				toShow.add(rs.getString(1));
+				toShow.add(rs.getString(2));
+				toShow.add(rs.getString(6));	
 			}
 			stmt.close();
 		} catch (SQLException e) {

@@ -22,7 +22,8 @@ public class FullView {
 	private YearMonth currentMonth;
 	private HBox titleBar;
 	private MonthGridPane monthPane;
-	public static Database db;
+	public static Database db = new Database();;
+	public static int test = 1;
 
 	public FullView() throws IOException
 	{
@@ -31,7 +32,6 @@ public class FullView {
 		initTitleBar();
 		monthPane = new MonthGridPane(currentMonth);
 		fullView = new VBox(titleBar, dayLabels, monthPane);
-		db = new Database();
 		
 	}
 	
